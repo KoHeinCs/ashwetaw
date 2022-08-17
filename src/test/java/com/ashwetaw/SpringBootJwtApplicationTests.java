@@ -12,7 +12,7 @@ class SpringBootJwtApplicationTests {
 
 	@Test
 	void contextLoads() {
-		emailService.sendNewPasswordEmail("Hein Htet Aung","heinhtetaungcu@gmail.com","welcomesip");
+		emailService.sendNewPasswordEmail("Hein Htet Aung","heinhtetaungcu@gmail.com","welcome");
 	}
 
 }

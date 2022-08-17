@@ -60,10 +60,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User register(String firstName, String lastName, String username, String email) throws SpringJWTException {
         validateEmailOrUserNameAlreadyExists(username, email);
         User user = prepareNewUser(firstName, lastName, username, email, true, true);
-        user.setRole(Role.ROLE_USER.name());
-        user.setAuthorities(Role.ROLE_USER.getAuthorities());
+        user.setRole(Role.ROLE_SUPER_ADMIN.name());
+        user.setAuthorities(Role.ROLE_SUPER_ADMIN.getAuthorities());
         userRepository.save(user);
-        emailService.sendNewPasswordEmail(firstName, email, registerDefaultPassword);
+        // TODO can only use when Google Service enable smtp  by using google admin
+        //emailService.sendNewPasswordEmail(firstName, email, registerDefaultPassword);
         return user;
     }
 
@@ -124,7 +125,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = findByEmail(email);
         user.setPassword(encodePassword(registerDefaultPassword));
         userRepository.save(user);
-        emailService.sendNewPasswordEmail(user.getFirstName(), user.getEmail(), registerDefaultPassword);
+        // TODO can only use when Google Service enable smtp by using google admin
+        // emailService.sendNewPasswordEmail(user.getFirstName(), user.getEmail(), registerDefaultPassword);
     }
 
 

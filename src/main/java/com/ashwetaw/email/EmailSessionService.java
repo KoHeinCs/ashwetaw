@@ -32,7 +32,7 @@ public class EmailSessionService {
             //debugging purpose only
             props.put("mail.debug", true);
 
-            return Session.getInstance(props, new Authenticator() {
+            session = Session.getInstance(props, new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(USERNAME, PASSWORD);
