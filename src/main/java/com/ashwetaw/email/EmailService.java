@@ -1,5 +1,7 @@
 package com.ashwetaw.email;
 
+import com.ashwetaw.entities.Student;
+import com.ashwetaw.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.simplejavamail.api.email.Email;
 import org.simplejavamail.api.email.EmailPopulatingBuilder;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
+import java.util.List;
 
 import static com.ashwetaw.email.EmailConstant.*;
 
@@ -18,10 +21,15 @@ import static com.ashwetaw.email.EmailConstant.*;
 @RequiredArgsConstructor
 public class EmailService {
     private final EmailSessionService emailSessionService;
+    private final StudentService studentService;
+
+    public void sendStudentsEmail(){
+        Mailer mailer = MailerBuilder.usingSession(emailSessionService.getEmailSession()).buildMailer();
+        List<Student> studentList = studentService.getAllStudents();
+    }
 
     public void sendNewPasswordEmail(String userName,String email,String newPassword){
         Mailer mailer = MailerBuilder.usingSession(emailSessionService.getEmailSession()).buildMailer();
-
         mailer.sendMail(buildEmailForm(userName,email,newPassword));
     }
 

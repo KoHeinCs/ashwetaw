@@ -20,13 +20,21 @@ public class QuartzConfig {
 
 
     public static Trigger trigger(final Class jobClass) {
-        SimpleScheduleBuilder builder = SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(1);
-        builder.repeatForever();
+        /** https://www.freeformatter.com/cron-expression-generator-quartz.html **/
+        CronScheduleBuilder cron = CronScheduleBuilder.cronSchedule("0 0 * ? * *");
+
+        /**
+        SimpleScheduleBuilder builder = SimpleScheduleBuilder
+                .simpleSchedule()
+                .withIntervalInHours(1)
+                .repeatForever();
+         **/
 
         return TriggerBuilder
                 .newTrigger()
                 .withIdentity(jobClass.getSimpleName())
-                .withSchedule(builder)
+                .withSchedule(cron)
+                //.withSchedule(builder)
                 .startAt(new Date())
                 .build();
     }
