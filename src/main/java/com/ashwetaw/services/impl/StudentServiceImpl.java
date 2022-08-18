@@ -9,9 +9,15 @@ import com.ashwetaw.repositories.StudentRepository;
 import com.ashwetaw.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -52,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findByStudentRollNo(String rollNo) throws StudentNotFoundException {
-        Student Student = studentRepository.findStudentByRollNo(rollNo).orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND_MSG + rollNo));
+        Student Student = studentRepository.findStudentByRollNo(rollNo).orElseThrow(() -> new StudentNotFoundException(STUDENT_NOT_FOUND_BY_ROLLNO_MSG + rollNo));
         return Student;
     }
 
@@ -66,14 +72,32 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(long id) {
-        studentRepository.deleteById(id);
+    public void deleteStudent(long entityId) throws SpringJWTException{
+        if (studentRepository.existsById(entityId)) {
+            studentRepository.deleteById(entityId);
+        }else {
+            throw new  StudentNotFoundException(STUDENT_NOT_FOUND_BY_ID_MSG+entityId);
+        }
     }
 
     @Override
     public Student addNewStudent(StudentDTO studentDTO) {
         Student student = studentMapper.toEntity(studentDTO);
         return studentRepository.saveAndFlush(student);
+    }
+
+    @Override
+    public List<Student> getAllStudents(Integer pageNo, Integer pageSize, String sortBy)
+    {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+        Page<Student> pagedResult = studentRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private void validateEmailOrStudentNameAlreadyExists(String rollNo, String email) throws SpringJWTException {
@@ -100,6 +124,8 @@ public class StudentServiceImpl implements StudentService {
         student.setEmail(email);
         return student;
     }
+
+
 
 
 

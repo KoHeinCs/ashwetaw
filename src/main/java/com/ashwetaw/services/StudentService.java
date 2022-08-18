@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    
+     List<Student> getAllStudents(Integer pageNo, Integer pageSize, String sortBy);
 
     List<Student> getAllStudents() ;
 
@@ -22,7 +22,7 @@ public interface StudentService {
 
     Student updateStudent(String currentRollNo, String newName, String newYear,char newSection,String newAddress,String newEmail) throws SpringJWTException;
 
-    void deleteStudent(long id);
+    void deleteStudent(long id) throws SpringJWTException;
 
     Student addNewStudent(StudentDTO studentDTO);
 }

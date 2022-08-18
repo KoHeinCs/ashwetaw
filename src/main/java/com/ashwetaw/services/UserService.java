@@ -25,7 +25,7 @@ public interface UserService {
     User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail,
                     String role, boolean isNotLocked, boolean isActive) throws SpringJWTException;
 
-    void deleteUser(long id);
+    void deleteUser(long id)  throws SpringJWTException;
 
     void resetPassword(String email) throws SpringJWTException;
 }

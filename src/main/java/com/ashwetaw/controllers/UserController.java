@@ -67,9 +67,9 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('user:delete')")
-    public ResponseEntity<HttpResponse> deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<HttpResponse> deleteUser(@PathVariable("id") long id) throws SpringJWTException{
         userService.deleteUser(id);
-        return response(HttpStatus.NO_CONTENT, USER_DELETED_SUCCESSFULLY);
+        return response(HttpStatus.OK, USER_DELETED_SUCCESSFULLY);
     }
 
     private ResponseEntity<HttpResponse> response(HttpStatus httpStatus, String message) {

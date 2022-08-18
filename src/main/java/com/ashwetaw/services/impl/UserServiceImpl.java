@@ -4,10 +4,7 @@ import com.ashwetaw.config.security.SpringSecurityUser;
 import com.ashwetaw.email.EmailService;
 import com.ashwetaw.entities.User;
 import com.ashwetaw.enums.Role;
-import com.ashwetaw.exceptions.EmailExistException;
-import com.ashwetaw.exceptions.EmailNotFoundException;
-import com.ashwetaw.exceptions.SpringJWTException;
-import com.ashwetaw.exceptions.UsernameExistException;
+import com.ashwetaw.exceptions.*;
 import com.ashwetaw.repositories.UserRepository;
 import com.ashwetaw.services.LoginAttemptService;
 import com.ashwetaw.services.UserService;
@@ -116,8 +113,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(long entityId)  throws SpringJWTException{
+        if (userRepository.existsById(entityId)) {
+            userRepository.deleteById(entityId);
+        }else {
+            throw new StudentNotFoundException(USER_NOT_FOUND_BY_ID_MSG+entityId);
+        }
     }
 
     @Override
