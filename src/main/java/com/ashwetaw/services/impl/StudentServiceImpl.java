@@ -1,5 +1,7 @@
 package com.ashwetaw.services.impl;
 
+import com.ashwetaw.dto.StudentDTO;
+import com.ashwetaw.dto.mapper.StudentMapper;
 import com.ashwetaw.email.EmailService;
 import com.ashwetaw.entities.Student;
 import com.ashwetaw.exceptions.*;
@@ -21,7 +23,7 @@ import static com.ashwetaw.constant.MessageConstant.*;
 @Slf4j
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-    private final EmailService emailService;
+    private final StudentMapper studentMapper;
 
     @Override
     public Student addNewStudent(String name, String rollNo, String year, char section, String address, String email) throws SpringJWTException {
@@ -68,6 +70,12 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.deleteById(id);
     }
 
+    @Override
+    public Student addNewStudent(StudentDTO studentDTO) {
+        Student student = studentMapper.toEntity(studentDTO);
+        return studentRepository.saveAndFlush(student);
+    }
+
     private void validateEmailOrStudentNameAlreadyExists(String rollNo, String email) throws SpringJWTException {
         // check whether Student name already exists
         Student student = studentRepository.findStudentByRollNo(rollNo).orElse(null);
@@ -92,6 +100,7 @@ public class StudentServiceImpl implements StudentService {
         student.setEmail(email);
         return student;
     }
+
 
 
 }
