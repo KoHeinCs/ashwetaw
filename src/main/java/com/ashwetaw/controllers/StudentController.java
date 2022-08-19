@@ -5,6 +5,7 @@ import com.ashwetaw.dto.StudentDTO;
 import com.ashwetaw.entities.Student;
 import com.ashwetaw.exceptions.SpringJWTException;
 import com.ashwetaw.services.StudentService;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * @author Hein Htet Aung
- * @created at 17/08/2022
- **/
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    private ResponseEntity<Student> addNewStudent(@Valid @RequestBody StudentDTO studentDTO) {
+    private ResponseEntity<Student> addNewStudent(@Valid @ApiParam("Student information for a new student to be created. Will ignore id field !!") @RequestBody StudentDTO studentDTO) {
         Student student = studentService.addNewStudent(studentDTO);
         return new ResponseEntity<Student>(student, HttpStatus.OK);
     }
@@ -56,7 +53,7 @@ public class StudentController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('user:delete')")
-    public ResponseEntity<HttpResponse> deleteStudent(@PathVariable("id") long id) throws SpringJWTException{
+    public ResponseEntity<HttpResponse> deleteStudent(@PathVariable("id") long id) throws SpringJWTException {
         studentService.deleteStudent(id);
         return response(HttpStatus.OK, STUDENT_DELETED_SUCCESSFULLY);
     }

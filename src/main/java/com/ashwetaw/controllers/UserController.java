@@ -7,7 +7,6 @@ import com.ashwetaw.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +26,10 @@ public class UserController {
             @RequestParam("lastName") String lastName,
             @RequestParam("username") String username,
             @RequestParam("email") String email,
-            @RequestParam("role") String role,
             @RequestParam("isActive") String isActive,
             @RequestParam("isNotLocked") String isNotLocked
     ) throws SpringJWTException {
-        User newUser = userService.addNewUser(firstName, lastName, username, email, role,
+        User newUser = userService.addNewUser(firstName, lastName, username, email,
                 Boolean.parseBoolean(isNotLocked), Boolean.parseBoolean(isActive));
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
@@ -43,11 +41,10 @@ public class UserController {
             @RequestParam("lastName") String lastName,
             @RequestParam("username") String username,
             @RequestParam("email") String email,
-            @RequestParam("role") String role,
             @RequestParam("isActive") String isActive,
             @RequestParam("isNotLocked") String isNotLocked
     ) throws SpringJWTException {
-        User updateUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role,
+        User updateUser = userService.updateUser(currentUsername, firstName, lastName, username, email,
                 Boolean.parseBoolean(isNotLocked), Boolean.parseBoolean(isActive));
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
@@ -66,8 +63,7 @@ public class UserController {
 
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAuthority('user:delete')")
-    public ResponseEntity<HttpResponse> deleteUser(@PathVariable("id") long id) throws SpringJWTException{
+    public ResponseEntity<HttpResponse> deleteUser(@PathVariable("id") long id) throws SpringJWTException {
         userService.deleteUser(id);
         return response(HttpStatus.OK, USER_DELETED_SUCCESSFULLY);
     }

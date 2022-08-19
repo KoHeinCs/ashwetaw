@@ -67,17 +67,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNotLocked, boolean isActive) throws SpringJWTException {
+    public User addNewUser(String firstName, String lastName, String username, String email, boolean isNotLocked, boolean isActive) throws SpringJWTException {
         validateEmailOrUserNameAlreadyExists(username, email);
         User user = prepareNewUser(firstName, lastName, username, email, isNotLocked, isActive);
-        user.setRole(getRoleEnumName(role).name());
-        user.setAuthorities(getRoleEnumName(role).getAuthorities());
+        user.setRole(Role.ROLE_USER.name());
+        user.setAuthorities(Role.ROLE_USER.getAuthorities());
         userRepository.save(user);
         return user;
     }
 
     @Override
-    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isNotLocked, boolean isActive) throws SpringJWTException {
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, boolean isNotLocked, boolean isActive) throws SpringJWTException {
 
         User currentUser = findByUsername(currentUsername);
         currentUser.setFirstName(newFirstName);
@@ -86,8 +86,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         currentUser.setEmail(newEmail);
         currentUser.setActive(isActive);
         currentUser.setNotLocked(isNotLocked);
-        currentUser.setRole(getRoleEnumName(role).name());
-        currentUser.setAuthorities(getRoleEnumName(role).getAuthorities());
         userRepository.save(currentUser);
         return currentUser;
     }
@@ -122,12 +120,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void resetPassword(String email) throws SpringJWTException {
+    public void resetPassword(String email,String newPassword) throws SpringJWTException {
         User user = findByEmail(email);
-        user.setPassword(encodePassword(registerDefaultPassword));
+        user.setPassword(encodePassword(newPassword));
         userRepository.save(user);
         // TODO can only use when Google Service enable smtp by using google admin
-        // emailService.sendNewPasswordEmail(user.getFirstName(), user.getEmail(), registerDefaultPassword);
+        // emailService.sendNewPasswordEmail(user.getFirstName(), user.getEmail(), newPassword);
     }
 
 

@@ -19,13 +19,11 @@ public interface UserService {
 
     User findByEmail(String email) throws EmailNotFoundException;
 
-    User addNewUser(String firstName, String lastName, String username, String email,
-                    String role, boolean isNotLocked, boolean isActive) throws SpringJWTException;
+    User addNewUser(String firstName, String lastName, String username, String email,boolean isNotLocked, boolean isActive) throws SpringJWTException;
 
-    User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail,
-                    String role, boolean isNotLocked, boolean isActive) throws SpringJWTException;
+    User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, boolean isNotLocked, boolean isActive) throws SpringJWTException;
 
     void deleteUser(long id)  throws SpringJWTException;
 
-    void resetPassword(String email) throws SpringJWTException;
+    void resetPassword(String email,String newPassword) throws SpringJWTException;
 }

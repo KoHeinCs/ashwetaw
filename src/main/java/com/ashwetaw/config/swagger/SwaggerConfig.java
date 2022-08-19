@@ -18,7 +18,7 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
@@ -29,19 +29,21 @@ public class SwaggerConfig {
                 .build()
                 ;
     }
-    private ApiInfo apiInfo(){
-       Contact contact =  new Contact("Ko HeinCs","https://medium.com/@koheincs","heinhtetaungcu@gmail.com");
+
+    private ApiInfo apiInfo() {
+        Contact contact = new Contact("Ko HeinCs", "https://medium.com/@koheincs", "heinhtetaungcu@gmail.com");
         return new ApiInfo(
                 "Ashwetaw REST API"
-                ,"This is Code Test for Sr. Developer Position of Blue Stone"
-                ,"Version 1.0"
-                ,"This is for testing support only !!"
-                ,contact
-                ,"All right reserved under Ashwetaw developer, KoHeinCs "
-                ,null,
+                , "This is Code Test for Sr. Developer Position of Blue Stone"
+                , "Version 1.0"
+                , "This is for testing support only !!"
+                , contact
+                , "All right reserved under Ashwetaw developer, KoHeinCs "
+                , null,
                 Collections.emptyList()
-                );
+        );
     }
+
     private ApiKey apiKey() {
         return new ApiKey("JWT", "Authorization", "header");
     }

@@ -8,6 +8,8 @@ import com.ashwetaw.dto.mapper.UserMapper;
 import com.ashwetaw.entities.User;
 import com.ashwetaw.exceptions.SpringJWTException;
 import com.ashwetaw.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Api("Set of endpoints for Creating, Retrieving, Updating and Deleting of Users.")
 public class AuthenticationController {
     private static final String EMAIL_SENT = "An email with a new password was sent to: ";
     private final UserService userService;
@@ -30,13 +33,13 @@ public class AuthenticationController {
     private final UserMapper userMapper;
 
     @PostMapping("/register")
-    private ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO userDTO) throws SpringJWTException {
+    private ResponseEntity<UserDTO> register(@Valid @ApiParam("User information for a new user to be created. Will ignore id field !!") @RequestBody UserDTO userDTO) throws SpringJWTException {
         User newUser = userService.register(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getUsername(), userDTO.getEmail());
-        return new ResponseEntity<UserDTO>(userMapper.toDTO(newUser), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.toDTO(newUser), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    private ResponseEntity<UserDTO> login(@Valid @RequestBody UserDTO userDTO) throws UsernameNotFoundException {
+    private ResponseEntity<UserDTO> login(@Valid @ApiParam("User information to login . Will only need username && password fields !!") @RequestBody UserDTO userDTO) throws UsernameNotFoundException {
         authenticate(userDTO.getUsername(), userDTO.getPassword());
         User loginUser = userService.findByUsername(userDTO.getUsername());
         SpringSecurityUser springSecurityUser = new SpringSecurityUser(loginUser);
@@ -47,8 +50,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/resetPassword/{email}")
-    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email) throws SpringJWTException {
-        userService.resetPassword(email);
+    public ResponseEntity<HttpResponse> resetPassword(@PathVariable("email") String email,@PathVariable("newPassword") String newPassword) throws SpringJWTException {
+        userService.resetPassword(email,newPassword);
         return response(HttpStatus.OK, EMAIL_SENT + email);
     }
 
