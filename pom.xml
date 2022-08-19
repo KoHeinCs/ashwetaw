@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <simple.java.mail.version>6.6.1</simple.java.mail.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <apache.poi.version>4.1.2</apache.poi.version>
     </properties>
     <dependencies>
         <dependency>
@@ -91,6 +92,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${apache.poi.version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -120,11 +126,6 @@
                             <version>${mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <!--					<compilerArgs>-->
-                    <!--						<compilerArg>-->
-                    <!--							-Amapstruct.defaultComponentModel=spring-->
-                    <!--						</compilerArg>-->
-                    <!--					</compilerArgs>-->
                 </configuration>
             </plugin>
         </plugins>
