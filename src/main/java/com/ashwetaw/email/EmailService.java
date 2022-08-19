@@ -68,6 +68,8 @@ public class EmailService {
 
     public ByteArrayOutputStream getStudentExcelAsByteArray() {
         List<Student> studentList = studentService.getAllStudents();
+        if (studentList.isEmpty())
+            return new ByteArrayOutputStream();
         return ExcelUtil.studentsToExcel(studentList);
     }
 }
